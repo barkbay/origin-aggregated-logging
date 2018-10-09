@@ -59,6 +59,12 @@ RUN ln -s /usr/local/bin/logging ${HOME}/logging && \
     ${HOME}/install.sh && \
     rm -rf /tmp/lib
 
+# Patch to access an external Openshift cluster
+COPY external_openshift/openshift-elasticsearch-plugin-5.6.10.4.jar /usr/share/elasticsearch/plugins/openshift-elasticsearch/openshift-elasticsearch-plugin-5.6.10.4.jar
+
+# Statefulset : set a ttl on DNS
+RUN echo "networkaddress.cache.ttl=30" >> /etc/alternatives/jre_openjdk/lib/security/java.security
+
 WORKDIR ${HOME}
 USER 1000
 CMD ["sh", "/opt/app-root/src/run.sh"]
